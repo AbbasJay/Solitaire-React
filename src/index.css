@@ -1,0 +1,184 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-image: url("https://img.wallpapersafari.com/desktop/1920/1080/37/20/XjARsP.jpg");
+}
+
+.blank-card {
+  width: 90px;
+  height: 120px;
+  border-radius: 8px;
+  border: 2px solid black;
+  background-color: white;
+  background-image: url("https://littleatmospheres.files.wordpress.com/2016/09/spade-draft-5.jpg");
+  background-repeat: no-repeat;
+  background-size: 143px;
+  background-position-y: -6px;
+}
+
+.empty-card {
+  width: 90px;
+  height: 120px;
+  border-radius: 8px;
+  border: 2px solid white;
+}
+
+.shown-card {
+  margin-left: 5px;
+  font-size: 20px;
+  width: 90px;
+  height: 120px;
+  border-radius: 8px;
+  border: 2px solid black;
+  background-color: white;
+}
+
+.card-shape {
+  margin: 5px;
+  height: 140px;
+  width: 100px;
+  border: 2px solid black;
+  border-radius: 8px;
+  background-color: white;
+}
+
+.top-section {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.card-deck {
+  display: flex;
+}
+
+.boxes {
+  display: flex;
+}
+
+.blank-box1 {
+  margin-left: 0;
+}
+.blank-box2 {
+  margin-left: 0;
+}
+.blank-box3 {
+  margin-left: 0;
+}
+.blank-box4 {
+  margin-left: 0;
+}
+
+.bb-standard {
+  margin-left: 5px;
+  font-size: 20px;
+  width: 90px;
+  height: 120px;
+  border-radius: 8px;
+  border: 2px solid black;
+  background-color: white;
+}
+
+.pb-standard {
+  font-size: 20px;
+  width: 90px;
+  height: 120px;
+  border-radius: 8px;
+  border: 2px solid black;
+  background-color: white;
+}
+
+.red {
+  color: red;
+}
+
+.black {
+  color: black;
+}
+.pb-standard2 {
+  display: contents;
+}
+
+.card-value {
+  width: 13px;
+  margin: 1px;
+}
+
+.card-border {
+  border: 1px solid black;
+  width: 65px;
+  margin-top: -22px;
+  margin-left: 16px;
+  height: 103px;
+  background-color: white;
+}
+
+.card-suit-in {
+  width: 50px;
+  height: 50px;
+  text-size-adjust: 50px;
+  font-size: 50px;
+  margin-top: -90px;
+  margin-left: 40px;
+}
+
+.the-cards {
+  margin-right: 5px;
+  margin-left: 10px;
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.card-holder {
+  position: relative;
+  height: auto;
+  width: 100px;
+}
+
+.card {
+  position: absolute;
+}
+
+.main-page {
+  margin: auto;
+  justify-content: flex-end;
+}
+
+.selected-card {
+  border: 1px solid red;
+}
+
+.reset-button {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 4px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.reset-button:hover {
+  color: black;
+  background-color: white;
+  cursor: pointer;
+  font-family: serif;
+}
+
+.color {
+  background-color: antiquewhite;
+}
+
+.end-message {
+  color: white;
+  display: flex;
+  justify-content: center;
+  margin-top: 60px;
+  font-size: 25px;
+  font-family: serif;
+}

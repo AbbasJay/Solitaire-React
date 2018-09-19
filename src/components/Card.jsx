@@ -16,6 +16,8 @@ class Card extends Component {
           return <HeartsIcon />;
         case "♤":
           return <SpadesIcon />;
+        default:
+          return;
       }
     }
   };

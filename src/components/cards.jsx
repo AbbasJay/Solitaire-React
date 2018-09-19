@@ -18,13 +18,14 @@ class Cards extends Component {
     };
   }
   componentWillMount() {
-    this.mus();
+    this.addToPlayRow();
     this.setFirstCard();
   }
 
   setFirstCard = () => {
-    this.state.cards[0].flipped = true;
-    this.setState({ cards: this.state.cards });
+    let cards = this.state.cards;
+    cards[0].flipped = true;
+    this.setState({ cards });
   };
 
   createDeck = () => {
@@ -83,149 +84,134 @@ class Cards extends Component {
   };
 
   showNextCard = () => {
-    if (this.state.cards.length > 0) {
-      let nextIndex = this.state.shownCardIndex + 1;
-      if (nextIndex === this.state.cards.length) {
+    let cards = this.state.cards;
+    let shownCardIndex = this.state.shownCardIndex;
+    if (cards.length > 0) {
+      let nextIndex = shownCardIndex + 1;
+      if (nextIndex === cards.length) {
         nextIndex = 0;
       }
-
-      let a;
-      a = [...this.state.cards];
-      a[nextIndex].flipped = true;
+      cards[nextIndex].flipped = true;
       if (nextIndex > 0) {
-        a[nextIndex - 1].flipped = false;
+        cards[nextIndex - 1].flipped = false;
       }
-      a[this.state.shownCardIndex].selected = false;
-
+      cards[shownCardIndex].selected = false;
       this.setState({
         shownCardIndex: nextIndex,
-        cards: a
+        cards
       });
     }
   };
 
   placement = cardRow => {
     let addedCard = false;
-
-    let card = this.state.cards[this.state.shownCardIndex];
-
-    let a = this.state.cards[this.state.shownCardIndex - 1];
+    let shownCardIndex = this.state.shownCardIndex;
+    let cards = this.state.cards;
+    let Selectedcard = this.state.cards[shownCardIndex];
     let newIndex;
 
-    if (this.state.shownCardIndex === 0) {
+    if (shownCardIndex === 0) {
       newIndex = 0;
     } else {
-      newIndex = this.state.shownCardIndex - 1;
+      newIndex = shownCardIndex - 1;
     }
-    if (card.rank === 1 && cardRow.length === 0) {
-      cardRow.push(card);
+    if (Selectedcard.rank === 1 && cardRow.length === 0) {
+      cardRow.push(Selectedcard);
       addedCard = true;
     } else if (
       cardRow.length > 0 &&
-      card.rank - 1 === cardRow[cardRow.length - 1].rank
+      Selectedcard.rank - 1 === cardRow[cardRow.length - 1].rank
     ) {
-      cardRow.push(card);
+      cardRow.push(Selectedcard);
       addedCard = true;
     }
-    if (addedCard && this.state.cards.length > 0) {
-      this.state.cards.splice(this.state.shownCardIndex, 1);
-      card.selected = false;
-      if (this.state.shownCardIndex > 0) {
-        this.state.cards[this.state.shownCardIndex - 1].flipped = true;
+    if (addedCard && cards.length > 0) {
+      cards.splice(shownCardIndex, 1);
+      Selectedcard.selected = false;
+      if (shownCardIndex > 0) {
+        cards[shownCardIndex - 1].flipped = true;
       }
-      if (this.state.cards.length > 0 && this.state.shownCardIndex === 0) {
-        this.state.cards[0].flipped = true;
+      if (cards.length > 0 && shownCardIndex === 0) {
+        cards[0].flipped = true;
       }
       this.setState({
         shownCardIndex: newIndex,
-        cards: this.state.cards
+        cards
       });
     }
   };
 
   placeCards = () => {
     let card = this.state.cards[this.state.shownCardIndex];
+    let topRows = this.state.topRows;
+
     if (card.suit === "♧") {
-      this.placement(this.state.topRows[0]);
+      this.placement(topRows[0]);
     }
     if (card.suit === "♢") {
-      this.placement(this.state.topRows[1]);
+      this.placement(topRows[1]);
     }
     if (card.suit === "♤") {
-      this.placement(this.state.topRows[2]);
+      this.placement(topRows[2]);
     }
     if (card.suit === "♡") {
-      this.placement(this.state.topRows[3]);
+      this.placement(topRows[3]);
     }
   };
 
-  mus = () => {
+  addToPlayRow = () => {
     for (let i = 0; i < 7; i++) {
+      let playRows = this.state.playRows;
       let cardsToAdd = this.state.cards.splice(0, i + 1);
-      this.state.playRows[i].push(...cardsToAdd);
-      this.state.playRows[i][this.state.playRows[i].length - 1].flipped = true;
+      playRows[i].push(...cardsToAdd);
+      playRows[i][playRows[i].length - 1].flipped = true;
+      this.setState({ playRows });
     }
   };
 
   placementRow = (cardTopRow, card, lengthOfPlayRows) => {
-    let a = this.state.playRows;
-    if (
-      a[0].length === 0 &&
-      a[1].length === 0 &&
-      a[2].length === 0 &&
-      a[3].length === 0 &&
-      a[4].length === 0 &&
-      a[5].length === 0 &&
-      a[6].length === 0
-    ) {
-      alert("Well done!! you have completed this round");
-    }
+    let playRows = this.state.playRows;
 
-    let addedCard = false;
     if (card.rank === 1 && cardTopRow.length === 0) {
       card.flipped = true;
       cardTopRow.push(card);
-      addedCard = true;
-      let a = this.state.playRows[lengthOfPlayRows].length - 1;
-      let b = this.state.playRows[lengthOfPlayRows];
-      b.splice(a, 1);
+      let selectedCardRowLength = playRows[lengthOfPlayRows].length - 1;
+      let selectedCardRow = playRows[lengthOfPlayRows];
+      selectedCardRow.splice(selectedCardRowLength, 1);
     } else if (
       cardTopRow.length > 0 &&
       card.rank - 1 === cardTopRow[cardTopRow.length - 1].rank
     ) {
       cardTopRow.push(card);
-      addedCard = true;
-      let a = this.state.playRows[lengthOfPlayRows].length - 1;
-      let b = this.state.playRows[lengthOfPlayRows];
-      b.splice(a, 1);
+      let selectedCardRowLength = playRows[lengthOfPlayRows].length - 1;
+      let selectedCardRow = playRows[lengthOfPlayRows];
+      selectedCardRow.splice(selectedCardRowLength, 1);
     }
-
-    let flippedCard = this.state.playRows[lengthOfPlayRows][
-      this.state.playRows[lengthOfPlayRows].length - 1
-    ];
-
+    let flippedCard =
+      playRows[lengthOfPlayRows][playRows[lengthOfPlayRows].length - 1];
     if (flippedCard) {
       flippedCard.flipped = true;
     }
-
     this.setState({
-      playRows: this.state.playRows
+      playRows
     });
   };
 
   placePlayRow = (card, lengthOfPlayRows, indexOfCard) => {
     let a = this.state.playRows[lengthOfPlayRows].length - 1;
+    let topRows = this.state.topRows;
+
     if (card.suit === "♧" && indexOfCard === a) {
-      this.placementRow(this.state.topRows[0], card, lengthOfPlayRows);
+      this.placementRow(topRows[0], card, lengthOfPlayRows);
     }
     if (card.suit === "♢" && indexOfCard === a) {
-      this.placementRow(this.state.topRows[1], card, lengthOfPlayRows);
+      this.placementRow(topRows[1], card, lengthOfPlayRows);
     }
     if (card.suit === "♤" && indexOfCard === a) {
-      this.placementRow(this.state.topRows[2], card, lengthOfPlayRows);
+      this.placementRow(topRows[2], card, lengthOfPlayRows);
     }
     if (card.suit === "♡" && indexOfCard === a) {
-      this.placementRow(this.state.topRows[3], card, lengthOfPlayRows);
+      this.placementRow(topRows[3], card, lengthOfPlayRows);
     }
   };
 
@@ -234,19 +220,20 @@ class Cards extends Component {
     let selectedCardIndex;
     let selectedCardFromDeck;
     let selectedCardRowIndex;
+    let cards = this.state.cards;
+    let shownCardIndex = this.state.shownCardIndex;
+    let playRows = this.state.playRows;
+    let selectedDeckCard = this.state.cards[shownCardIndex];
 
     //this section is to handle an onclick on the player deck second click
-    if (
-      this.state.cards.length > 0 &&
-      this.state.cards[this.state.shownCardIndex].selected
-    ) {
+    if (cards.length > 0 && cards[shownCardIndex].selected) {
       selectedCardFromDeck = true;
     }
 
     //----------------------this executes when a playerRow card is clicked for the second time
-    for (let i = 0; i < this.state.playRows.length; i++) {
-      for (let j = 0; j < this.state.playRows[i].length; j++) {
-        if (this.state.playRows[i][j].selected) {
+    for (let i = 0; i < playRows.length; i++) {
+      for (let j = 0; j < playRows[i].length; j++) {
+        if (playRows[i][j].selected) {
           (selectedCardRowIndex = i), (selectedCardIndex = j);
         }
       }
@@ -254,50 +241,43 @@ class Cards extends Component {
 
     if (
       selectedCardFromDeck &&
-      this.state.cards[this.state.shownCardIndex].rank === 13 &&
-      this.state.cards.length > 0
+      cards[shownCardIndex].rank === 13 &&
+      cards.length > 0
     ) {
-      let selectedDeckCard = this.state.cards[this.state.shownCardIndex];
+      let selectedDeckCard = cards[shownCardIndex];
       if (playerRow >= 0) {
-        let movingCardLocation = this.state.playRows[playerRow];
+        let movingCardLocation = playRows[playerRow];
         if (
           (playerRow === 0 || playerRow > 0) &&
-          this.state.playRows[playerRow].length === 0
+          movingCardLocation.length === 0
         ) {
-          this.state.cards.splice(this.state.shownCardIndex, 1);
-          this.state.playRows[playerRow].push(selectedDeckCard);
+          cards.splice(shownCardIndex, 1);
+          movingCardLocation.push(selectedDeckCard);
           selectedDeckCard.selected = false;
-          this.state.playRows[playerRow][0].flipped = true;
-          let newShownCardIndex = this.state.shownCardIndex
-            ? this.state.shownCardIndex - 1
-            : 0;
-          this.state.cards[newShownCardIndex].flipped = true;
+          movingCardLocation[0].flipped = true;
+          let newShownCardIndex = shownCardIndex ? shownCardIndex - 1 : 0;
+          cards[newShownCardIndex].flipped = true;
           this.setState({
-            playRows: this.state.playRows,
+            playRows,
             shownCardIndex: newShownCardIndex,
-            cards: this.state.cards
+            cards
           });
         }
         selectedDeckCard.selected = false;
-        this.setState({ cards: this.state.cards });
+        this.setState({ cards });
         return;
       }
 
-      let movingCardLocation = this.state.playRows[playerRow][
-        this.state.playRows[playerRow].length - 1
-      ];
+      let movingCardLocation =
+        playRows[playerRow][playRows[playerRow].length - 1];
       if (
         selectedDeckCard.color !== movingCardLocation.color &&
         selectedDeckCard.rank === movingCardLocation.rank - 1
       ) {
-        this.state.cards.splice(this.state.shownCardIndex, 1);
-        this.state.playRows[playerRow].push(selectedDeckCard);
+        cards.splice(shownCardIndex, 1);
+        playRows[playerRow].push(selectedDeckCard);
         selectedDeckCard.selected = false;
-        let playRows = this.state.playRows;
-        let cards = this.state.cards;
-        let newShownCardIndex = this.state.shownCardIndex
-          ? this.state.shownCardIndex - 1
-          : 0;
+        let newShownCardIndex = shownCardIndex ? shownCardIndex - 1 : 0;
 
         this.setState({ playRows, cards, shownCardIndex: newShownCardIndex });
         return;
@@ -305,35 +285,26 @@ class Cards extends Component {
 
       return;
     }
-
     //this section is to handle an onclick on the player deck second click
     if (
       selectedCardFromDeck === true &&
       (playerRow === 0 || playerRow) &&
-      this.state.cards.length > 0
+      cards.length > 0
     ) {
-      let selectedDeckCard = this.state.cards[this.state.shownCardIndex];
       if (playerRow === 0 || playerRow) {
-        let movingCardLocation = this.state.playRows[playerRow][
-          this.state.playRows[playerRow].length - 1
-        ];
-
+        let movingCardLocation =
+          playRows[playerRow][playRows[playerRow].length - 1];
         if (
           selectedDeckCard.color !== movingCardLocation.color &&
           selectedDeckCard.rank === movingCardLocation.rank - 1
         ) {
-          this.state.cards.splice(this.state.shownCardIndex, 1);
-          this.state.playRows[playerRow].push(selectedDeckCard);
+          cards.splice(shownCardIndex, 1);
+          playRows[playerRow].push(selectedDeckCard);
           selectedDeckCard.selected = false;
           selectedDeckCard.flipped = true;
-          let playRows = this.state.playRows;
-          let cards = this.state.cards;
-          if (this.state.cards.length > 0) {
-            debugger;
-            let newShownCardIndex =
-              this.state.shownCardIndex > 0 ? this.state.shownCardIndex - 1 : 0;
-            this.state.cards[newShownCardIndex].flipped = true;
-
+          if (cards.length > 0) {
+            let newShownCardIndex = shownCardIndex > 0 ? shownCardIndex - 1 : 0;
+            cards[newShownCardIndex].flipped = true;
             this.setState({
               playRows,
               cards,
@@ -343,93 +314,82 @@ class Cards extends Component {
           return;
         } else {
           selectedDeckCard.selected = false;
-          let playRows = this.state.playRows;
           this.setState({ playRows });
         }
-
         return;
       }
     }
 
-    //----------------------this is the first thing that executes when a playerRow card is clicked for the second time
+    //----------------------this executes when a playerRow card is clicked for the second time
     if (selectedCardRowIndex >= 0 && (playerRow === 0 || playerRow)) {
-      let selectedCard = this.state.playRows[selectedCardRowIndex][
-        selectedCardIndex
-      ];
-      let movingCardLocation = this.state.playRows[playerRow][
-        this.state.playRows[playerRow].length - 1
-      ];
+      let selectedCard = playRows[selectedCardRowIndex][selectedCardIndex];
+      let movingCardLocation =
+        playRows[playerRow][playRows[playerRow].length - 1];
+
       if (
-        this.state.playRows[playerRow].length > 0 &&
+        playRows[playerRow].length > 0 &&
         selectedCard.color !== movingCardLocation.color &&
         selectedCard.rank === movingCardLocation.rank - 1
       ) {
-        let removedCards = this.state.playRows[selectedCardRowIndex].splice(
+        let removedCards = playRows[selectedCardRowIndex].splice(
           selectedCardIndex,
-          this.state.playRows[selectedCardRowIndex].length - selectedCardIndex
+          playRows[selectedCardRowIndex].length - selectedCardIndex
         );
-        this.state.playRows[playerRow].push(...removedCards);
+        playRows[playerRow].push(...removedCards);
 
-        if (this.state.playRows[selectedCardRowIndex].length > 0) {
-          this.state.playRows[selectedCardRowIndex][
-            selectedCardIndex - 1
-          ].flipped = true;
+        if (playRows[selectedCardRowIndex].length > 0) {
+          playRows[selectedCardRowIndex][selectedCardIndex - 1].flipped = true;
         }
         selectedCard.selected = false;
-        let playRows = this.state.playRows;
         this.setState({ playRows });
         return;
       } else {
         selectedCard.selected = false;
-        this.setState({ playRows: this.state.playRows });
+        this.setState({ playRows: playRows });
       }
 
-      if (
-        this.state.playRows[playerRow].length === 0 &&
-        selectedCard.rank === 13
-      ) {
-        let kingRow = this.state.playRows[selectedCardRowIndex].splice(
+      if (playRows[playerRow].length === 0 && selectedCard.rank === 13) {
+        let kingRow = playRows[selectedCardRowIndex].splice(
           selectedCardIndex,
-          this.state.playRows[selectedCardRowIndex].length - selectedCardIndex
+          playRows[selectedCardRowIndex].length - selectedCardIndex
         );
-        this.state.playRows[playerRow].push(...kingRow);
-        if (this.state.cards.length > 0) {
-          let b = this.state.playRows[selectedCardRowIndex].length - 1;
+        playRows[playerRow].push(...kingRow);
+        if (cards.length > 0) {
+          let b = playRows[selectedCardRowIndex].length - 1;
           selectedCard.selected = false;
-          this.setState({ playRows: this.state.playRows });
-          if (this.state.playRows[selectedCardRowIndex].length > 0) {
-            this.state.playRows[selectedCardRowIndex][b].flipped = true;
+          this.setState({ playRows: playRows });
+          if (playRows[selectedCardRowIndex].length > 0) {
+            playRows[selectedCardRowIndex][b].flipped = true;
           }
-          this.setState({ playRows: this.state.playRows });
+          this.setState({ playRows: playRows });
         }
       }
       return;
     }
     //this section is to handle an onclick on the deck first click
 
-    if (playerRow === false && playerRow !== 0 && this.state.cards.length > 0) {
+    if (playerRow === false && playerRow !== 0 && cards.length > 0) {
       if (selectedCardIndex === 0 || selectedCardIndex) {
-        let b = this.state.playRows[selectedCardRowIndex][
-          this.state.playRows[selectedCardRowIndex].length - 1
-        ];
+        let b =
+          playRows[selectedCardRowIndex][
+            playRows[selectedCardRowIndex].length - 1
+          ];
         b.selected = false;
-        this.setState({ playRows: this.state.playRows });
+        this.setState({ playRows: playRows });
         return;
       }
-      if (this.state.cards[this.state.shownCardIndex].selected === false) {
-        this.state.cards[this.state.shownCardIndex].selected = true;
-        let cards = this.state.cards;
+      if (cards[shownCardIndex].selected === false) {
+        cards[shownCardIndex].selected = true;
         this.setState({ cards });
       } else {
-        this.state.cards[this.state.shownCardIndex].selected = false;
-        let cards = this.state.cards;
+        cards[shownCardIndex].selected = false;
         this.setState({ cards });
       }
       return;
     }
     //----------------------this is the first thing that executes when a playerRow card is clicked
-    if (this.state.playRows[playerRow].length > 0 && card.flipped === true) {
-      let newPlayRows = [...this.state.playRows];
+    if (playRows[playerRow].length > 0 && card.flipped === true) {
+      let newPlayRows = [...playRows];
       newPlayRows[playerRow][cardIndex].selected = true;
       this.setState({ playRows: newPlayRows });
     }
@@ -438,11 +398,10 @@ class Cards extends Component {
 
   getPlayerRow = () => {
     let emptyArray = [];
-    let red = "red";
-    let black = "black";
+    let playRows = this.state.playRows;
 
-    for (let i = 0; i < this.state.playRows.length; i++) {
-      if (this.state.playRows[i].length === 0) {
+    for (let i = 0; i < playRows.length; i++) {
+      if (playRows[i].length === 0) {
         emptyArray.push(
           <div className="card-holder">
             <div className="empty-card" onClick={() => this.moveCards(null, i)}>
@@ -453,7 +412,7 @@ class Cards extends Component {
       } else {
         emptyArray.push(
           <div className="card-holder">
-            {this.state.playRows[i].map((card, index) => {
+            {playRows[i].map((card, index) => {
               return (
                 <Card
                   card={card}
@@ -474,9 +433,11 @@ class Cards extends Component {
 
   getPlayerRowTop = () => {
     let emptyArray = [];
+    let topRows = this.state.topRows;
+
     for (let i = 0; i < 4; i++) {
-      if (this.state.topRows[i].length > 0) {
-        let card = this.state.topRows[i][this.state.topRows[i].length - 1];
+      if (topRows[i].length > 0) {
+        let card = topRows[i][topRows[i].length - 1];
         emptyArray.push(<Card card={card} />);
       } else {
         emptyArray.push(<div className="pb-standard" />);
@@ -486,47 +447,46 @@ class Cards extends Component {
   };
 
   reset = () => {
-    (this.state.cards = this.createDeck()),
-      (this.state.shownCardIndex = 0),
-      (this.state.topRows = [[], [], [], []]),
-      (this.state.playRows = [[], [], [], [], [], [], []]),
-      (this.state.movingArray = []),
-      (this.state.cardRows = []),
-      (this.state.selectedCard = []);
+    let cards = (this.state.cards = this.createDeck());
+    let shownCardIndex = (this.state.shownCardIndex = 0);
+    let topRows = (this.state.topRows = [[], [], [], []]);
+    let playRows = (this.state.playRows = [[], [], [], [], [], [], []]);
+    let movingArray = (this.state.movingArray = []);
+    let cardRows = (this.state.cardRows = []);
+    let selectedCard = (this.state.selectedCard = []);
 
     this.setState({
-      cards: this.state.cards,
-      shownCardIndex: this.state.shownCardIndex,
-      topRows: this.state.topRows,
-      playRows: this.state.playRows,
-      movingArray: this.state.movingArray,
-      cardRows: this.state.cardRows,
-      selectedCard: this.state.selectedCard
+      cards,
+      shownCardIndex,
+      topRows,
+      playRows,
+      movingArray,
+      cardRows,
+      selectedCard
     });
 
-    this.mus();
+    this.addToPlayRow();
     this.setFirstCard();
     this.getTopSection();
     this.getPlayerRow();
   };
 
   getTopSection = () => {
+    let cards = this.state.cards;
+    let shownCardIndex = this.state.shownCardIndex;
     return (
       <div className="top-section">
         <div className="card-deck">
           <div className="blank-card" onClick={this.showNextCard} />
 
-          {this.state.cards[this.state.shownCardIndex] && (
+          {cards[shownCardIndex] && (
             <Card
-              card={this.state.cards[this.state.shownCardIndex]}
+              card={cards[shownCardIndex]}
               clickHandlerDouble={() => {
                 this.placeCards();
               }}
               clickHandlerSingle={() => {
-                this.moveCards(
-                  this.state.cards[this.state.shownCardIndex],
-                  false
-                );
+                this.moveCards(cards[shownCardIndex], false);
               }}
             />
           )}
@@ -537,15 +497,15 @@ class Cards extends Component {
   };
 
   endGame = () => {
-    let a = this.state.playRows;
+    let playRows = this.state.playRows;
     if (
-      a[0].length === 0 &&
-      a[1].length === 0 &&
-      a[2].length === 0 &&
-      a[3].length === 0 &&
-      a[4].length === 0 &&
-      a[5].length === 0 &&
-      a[6].length === 0
+      playRows[0].length === 0 &&
+      playRows[1].length === 0 &&
+      playRows[2].length === 0 &&
+      playRows[3].length === 0 &&
+      playRows[4].length === 0 &&
+      playRows[5].length === 0 &&
+      playRows[6].length === 0
     ) {
       return true;
     }
@@ -553,8 +513,11 @@ class Cards extends Component {
   };
 
   getIconDeck = () => {
-    if (this.state.cards.length > 0) {
-      switch (this.state.cards[this.state.shownCardIndex].suit) {
+    let cards = this.state.cards;
+    let shownCardIndex = this.state.shownCardIndex;
+
+    if (cards.length > 0) {
+      switch (cards[shownCardIndex].suit) {
         case "♢":
           return <DiamondIcon />;
         case "♧":
@@ -563,13 +526,17 @@ class Cards extends Component {
           return <HeartsIcon />;
         case "♤":
           return <SpadesIcon />;
+        default:
+          return;
       }
     }
   };
 
   getIconTop = card => {
+    let topRows = this.state.topRows;
+
     for (let i = 0; i < 4; i++) {
-      if (this.state.topRows[i].length > 0) {
+      if (topRows[i].length > 0) {
         if (card.flipped) {
           switch (card.suit) {
             case "♢":
@@ -580,6 +547,8 @@ class Cards extends Component {
               return <HeartsIcon />;
             case "♤":
               return <SpadesIcon />;
+            default:
+              return;
           }
         }
       }

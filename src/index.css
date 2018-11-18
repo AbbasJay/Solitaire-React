@@ -1,1 +1,208 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-image: url("https://img.wallpapersafari.com/desktop/1920/1080/37/20/XjARsP.jpg");
+}
 
+.blank-card {
+  width: 100px;
+  height: 135px;
+  border-radius: 8px;
+  border: 2px solid black;
+  background-color: white;
+  background-image: url("https://littleatmospheres.files.wordpress.com/2016/09/spade-draft-5.jpg");
+  background-repeat: no-repeat;
+  background-size: 143px;
+  background-position-y: -6px;
+  box-shadow: 0 0 4px 0px white;
+}
+
+.empty-card {
+  width: 100px;
+  height: 135px;
+  border-radius: 8px;
+  border: 2px solid white;
+  margin-left: 26px;
+  position: fixed;
+}
+
+.shown-card {
+  margin-left: 5px;
+  font-size: 20px;
+  width: 100px;
+  height: 135px;
+  border-radius: 8px;
+  border: 2px solid black;
+  background-color: white;
+  box-shadow: 0 0 4px 0px white;
+}
+
+.card-shape {
+  margin: 5px;
+  width: 100px;
+  height: 135px;
+  border: 2px solid black;
+  border-radius: 8px;
+  background-color: white;
+}
+
+.top-section {
+  margin-top: 10px;
+  margin-left: 12px;
+  display: flex;
+  justify-content: space-between;
+  margin-right: 11px;
+}
+
+.card-deck {
+  display: flex;
+  margin-left: -5px;
+}
+
+.boxes {
+  display: flex;
+}
+
+.blank-box1 {
+  margin-left: 0;
+}
+.blank-box2 {
+  margin-left: 0;
+}
+.blank-box3 {
+  margin-left: 0;
+}
+.blank-box4 {
+  margin-left: 0;
+}
+
+.bb-standard {
+  margin-left: 5px;
+  font-size: 20px;
+  width: 100px;
+  height: 135px;
+  border-radius: 8px;
+  border: 2px solid black;
+  background-color: white;
+  box-shadow: 0 0 4px 0px white;
+  display: flex;
+}
+
+.pb-standard {
+  font-size: 20px;
+  width: 100px;
+  height: 135px;
+  border-radius: 8px;
+  border: 2px solid black;
+  background-color: white;
+  box-shadow: 0 0 4px 0px white;
+  display: flex;
+  position: relative;
+  margin-left: 25px;
+}
+
+.red {
+  color: red;
+}
+
+.black {
+  color: black;
+}
+
+.card-border {
+  border: 1px solid black;
+  width: 65px;
+  margin-top: -22px;
+  margin-left: 16px;
+  height: 103px;
+  background-color: white;
+}
+
+.card-suit-in {
+  width: 50px;
+  height: 50px;
+  text-size-adjust: 50px;
+  font-size: 50px;
+  margin-top: -90px;
+  margin-left: 40px;
+}
+
+.the-cards {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+  margin-left: -29px;
+  margin-right: 24px;
+}
+
+.card-holder {
+  position: relative;
+  margin-left: 11px;
+  height: auto;
+  margin-right: 17px;
+  width: 100px;
+}
+
+.card {
+  position: absolute;
+}
+
+.main-page {
+  margin: auto;
+  justify-content: flex-end;
+}
+
+.selected-card {
+  border: 2px solid red;
+}
+
+.reset-button {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 4px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-family: serif;
+}
+
+.reset-button:hover {
+  color: black;
+  background-color: white;
+  cursor: pointer;
+}
+
+.end-message {
+  color: white;
+  display: flex;
+  justify-content: center;
+  font-size: 38px;
+  font-family: serif;
+  margin-top: 168px;
+}
+
+.icon-holder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
+
+.suit-icon {
+  height: 30px;
+  width: 30px;
+}
+.number-holder {
+  margin: 0;
+  margin-top: -5px;
+}
+.card-holder2 {
+  display: flex;
+}

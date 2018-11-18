@@ -23,7 +23,7 @@ class Cards extends Component {
   }
 
   setFirstCard = () => {
-    let cards = this.state.cards;
+    let cards = this.createDeck();
     cards[0].flipped = true;
     this.setState({ cards });
   };
@@ -68,7 +68,6 @@ class Cards extends Component {
       shuffleDeck.push(deck[index]);
       deck.splice(index, 1);
     }
-
     return shuffleDeck;
   };
 
@@ -159,13 +158,43 @@ class Cards extends Component {
     }
   };
 
-  addToPlayRow = () => {
-    for (let i = 0; i < 7; i++) {
-      let playRows = this.state.playRows;
-      let cardsToAdd = this.state.cards.splice(0, i + 1);
-      playRows[i].push(...cardsToAdd);
-      playRows[i][playRows[i].length - 1].flipped = true;
-      this.setState({ playRows });
+  addToPlayRow = reset => {
+    if (!reset) {
+      if (this.state.playRows[0].length === 0) {
+        for (let i = 0; i < 7; i++) {
+          let playRows = this.state.playRows;
+          let cardsToAdd = this.state.cards.splice(0, i + 1);
+          playRows[i].push(...cardsToAdd);
+          playRows[i][playRows[i].length - 1].flipped = true;
+          this.setState({ playRows });
+        }
+      }
+    }
+
+    if (reset) {
+      this.setState({
+        cards: this.createDeck(),
+        shownCardIndex: 0,
+        topRows: [[], [], [], []],
+        playRows: [[], [], [], [], [], [], []],
+        movingArray: [],
+        cardRows: []
+      });
+
+      let playRows = [[], [], [], [], [], [], []];
+      let cards = this.createDeck();
+
+      for (let i = 0; i < 7; i++) {
+        let cardsToAdd = cards.splice(0, i + 1);
+
+        playRows[i].push(...cardsToAdd);
+        playRows[i][playRows[i].length - 1].flipped = true;
+      }
+      this.setState({
+        playRows,
+        cards,
+        reset: false
+      });
     }
   };
 
@@ -234,7 +263,8 @@ class Cards extends Component {
     for (let i = 0; i < playRows.length; i++) {
       for (let j = 0; j < playRows[i].length; j++) {
         if (playRows[i][j].selected) {
-          (selectedCardRowIndex = i), (selectedCardIndex = j);
+          selectedCardRowIndex = i;
+          selectedCardIndex = j;
         }
       }
     }
@@ -411,10 +441,11 @@ class Cards extends Component {
         );
       } else {
         emptyArray.push(
-          <div className="card-holder">
+          <div key={i} className="card-holder">
             {playRows[i].map((card, index) => {
               return (
                 <Card
+                  key={index}
                   card={card}
                   clickHandlerDouble={() => this.placePlayRow(card, i, index)}
                   clickHandlerSingle={() => this.moveCards(card, i, index)}
@@ -440,35 +471,16 @@ class Cards extends Component {
         let card = topRows[i][topRows[i].length - 1];
         emptyArray.push(<Card card={card} />);
       } else {
-        emptyArray.push(<div className="pb-standard" />);
+        emptyArray.push(<div key={i} className="pb-standard" />);
       }
     }
     return emptyArray;
   };
 
   reset = () => {
-    let cards = (this.state.cards = this.createDeck());
-    let shownCardIndex = (this.state.shownCardIndex = 0);
-    let topRows = (this.state.topRows = [[], [], [], []]);
-    let playRows = (this.state.playRows = [[], [], [], [], [], [], []]);
-    let movingArray = (this.state.movingArray = []);
-    let cardRows = (this.state.cardRows = []);
-    let selectedCard = (this.state.selectedCard = []);
-
-    this.setState({
-      cards,
-      shownCardIndex,
-      topRows,
-      playRows,
-      movingArray,
-      cardRows,
-      selectedCard
-    });
-
-    this.addToPlayRow();
+    let reset = true;
+    this.addToPlayRow(reset);
     this.setFirstCard();
-    this.getTopSection();
-    this.getPlayerRow();
   };
 
   getTopSection = () => {
